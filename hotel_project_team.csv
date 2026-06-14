@@ -1,0 +1,10 @@
+Employee_ID,Name,Email,Role,Department,Employment_Type,Primary_Location,Status,Contact_Number,Working_Hours,Primary_Responsibility
+PM001,Ethan Brooks,orwellian1396@gmail.com,Project Manager,Project Management,Full-Time,Site Office,Active,+92-300-5551001,08:00-17:00,Overall coordination
+ENG001,Ayesha Malik,captain139617@gmail.com,Civil Engineer,Construction,Full-Time,Main Building,Active,+92-300-5551002,08:00-17:00,Structural supervision
+ELE001,Hamza Khan,i250686@isb.nu.edu.pk,Electrical Engineer,Electrical,Full-Time,Electrical Room,Active,+92-300-5551003,09:00-18:00,Power systems
+ARC001,Usman Tariq,i250686@isb.nu.edu.pk,Architect,Design,Consultant,Design Office,Active,+92-300-5551004,09:00-17:00,Interior & exterior design
+MEC001,Sarah Ahmed,captain139617@gmail.com,Mechanical Engineer,HVAC,Full-Time,Mechanical Plant,Active,+92-300-5551005,08:00-17:00,HVAC installation
+PLB001,Bilal Raza,captain139617@gmail.com,Plumbing Supervisor,Plumbing,Full-Time,Utility Area,Active,+92-300-5551006,08:00-17:00,Water systems
+INT001,Mariam Siddiqui,captain139617@gmail.com,Interior Designer,Interiors,Consultant,Showroom,Active,+92-300-5551007,10:00-18:00,Furniture & décor
+IT001,Noah Wilson,captain139617@gmail.com,IT & Network Lead,IT,Full-Time,Server Room,Active,+92-300-5551008,09:00-18:00,Network infrastructure
+OPS001,Zain Ali,captain139617@gmail.com,Operations Coordinator,Operations,Full-Time,Site Office,Active,+92-300-5551009,08:00-17:00,Vendor coordination

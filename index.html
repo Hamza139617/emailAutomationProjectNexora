@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexora Project Flow AI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+  
+    :root {
+      --bg:           #02020f;
+      --bg-deep:      #000008;
+      --bg-card:      rgba(255, 255, 255, 0.025);
+      --bg-card-hover:rgba(0, 212, 255, 0.04);
+      --border:       rgba(0, 212, 255, 0.12);
+      --border-hover: rgba(0, 212, 255, 0.3);
+
+      --cyan:         #00d4ff;
+      --cyan-dim:     rgba(0, 212, 255, 0.08);
+      --purple:       #8b5cf6;
+      --purple-dim:   rgba(139, 92, 246, 0.08);
+      --pink:         #f472b6;
+      --green:        #00ff88;
+      --green-dim:    rgba(0, 255, 136, 0.08);
+      --red:          #ff3366;
+      --red-dim:      rgba(255, 51, 102, 0.08);
+      --orange:       #fb923c;
+
+      --text:         #e8f0ff;
+      --text-sub:     rgba(232, 240, 255, 0.45);
+      --text-dim:     rgba(232, 240, 255, 0.2);
+
+      --glow-c:  0 0 24px rgba(0, 212, 255, 0.35);
+      --glow-p:  0 0 24px rgba(139, 92, 246, 0.35);
+      --glow-g:  0 0 24px rgba(0, 255, 136, 0.35);
+      --glow-r:  0 0 24px rgba(255, 51, 102, 0.35);
+    }
+
+ 
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+ 
+    .bg-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .bg-canvas::before {
+      content: '';
+      position: absolute;
+      inset: -100px;
+      background-image:
+        radial-gradient(circle, rgba(0,212,255,0.08) 1px, transparent 1px);
+      background-size: 44px 44px;
+      animation: gridDrift 30s linear infinite;
+    }
+
+    @keyframes gridDrift {
+      0%   { transform: translate(0, 0); }
+      100% { transform: translate(44px, 44px); }
+    }
+
+    /* Radial colour orbs */
+    .bg-canvas::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 40% at 15% 20%,  rgba(139,92,246,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 60% at 85% 80%,  rgba(0,212,255,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 50% at 50% 50%,  rgba(244,114,182,0.04) 0%, transparent 70%);
+      animation: orbPulse 12s ease-in-out infinite alternate;
+    }
+
+    @keyframes orbPulse {
+      0%   { opacity: 0.6; }
+      100% { opacity: 1; }
+    }
+
+    /* Scanline sweep */
+    .scanline {
+      position: fixed;
+      left: 0; top: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, transparent 0%, var(--cyan) 50%, transparent 100%);
+      opacity: 0.18;
+      z-index: 1;
+      animation: scanSweep 10s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes scanSweep {
+      0%   { top: -3px; }
+      100% { top: 100vh; }
+    }
+
+ 
+    .page {
+      position: relative;
+      z-index: 2;
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 28px 60px;
+    }
+
+   
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 36px 0 28px;
+      border-bottom: 1px solid var(--border);
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .header-brand {
+    
+    }
+
+    .header-logo {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(22px, 4vw, 44px);
+      font-weight: 900;
+      letter-spacing: 3px;
+      line-height: 1;
+      background: linear-gradient(100deg, #00d4ff 0%, #8b5cf6 35%, #f472b6 65%, #00d4ff 100%);
+      background-size: 250% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: logoShimmer 6s linear infinite;
+      filter: drop-shadow(0 0 28px rgba(0,212,255,0.3));
+    }
+
+    @keyframes logoShimmer {
+      0%   { background-position: 0% 0%; }
+      100% { background-position: 250% 0%; }
+    }
+
+    .header-sub {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 10px;
+      letter-spacing: 6px;
+      color: var(--text-dim);
+      margin-top: 8px;
+      text-transform: uppercase;
+    }
+
+    .header-rule {
+      width: 180px;
+      height: 1px;
+      margin-top: 14px;
+      background: linear-gradient(90deg, var(--cyan), var(--purple), transparent);
+      animation: ruleGrow 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes ruleGrow {
+      0%   { width: 120px; opacity: 0.4; }
+      100% { width: 220px; opacity: 1; }
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    
+    .btn {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      padding: 11px 22px;
+      border-radius: 4px;
+      cursor: pointer;
+      border: 1px solid;
+      transition: all 0.25s ease;
+      white-space: nowrap;
+    }
+
+    .btn-start {
+      background: var(--green-dim);
+      border-color: rgba(0,255,136,0.25);
+      color: var(--green);
+    }
+    .btn-start:hover {
+      background: rgba(0,255,136,0.14);
+      border-color: var(--green);
+      box-shadow: var(--glow-g);
+    }
+
+    .btn-stop {
+      background: rgba(251,146,60,0.08);
+      border-color: rgba(251,146,60,0.25);
+      color: var(--orange);
+    }
+    .btn-stop:hover {
+      background: rgba(251,146,60,0.16);
+      border-color: var(--orange);
+      box-shadow: 0 0 24px rgba(251,146,60,0.35);
+    }
+
+    .btn-close {
+      background: var(--red-dim);
+      border-color: rgba(255,51,102,0.25);
+      color: var(--red);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .btn-close:hover {
+      background: rgba(255,51,102,0.16);
+      border-color: var(--red);
+      box-shadow: var(--glow-r);
+    }
+
+    
+    .status-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 0;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .status-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .status-pill {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 8px 16px;
+      border-radius: 100px;
+    }
+
+    .status-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
+      flex-shrink: 0;
+      transition: all 0.3s;
+    }
+    .status-dot.stopped { background: var(--red); box-shadow: 0 0 8px var(--red); animation: none; }
+    .status-dot.running { animation: dotPulse 1.4s ease-in-out infinite; }
+
+    @keyframes dotPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.4; transform: scale(1.5); }
+    }
+
+    .status-label {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: var(--text-sub);
+    }
+
+    .status-val {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      transition: color 0.3s;
+    }
+    .status-val.running { color: var(--green); }
+    .status-val.stopped { color: var(--red); }
+
+    .conn-badge {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--text-dim);
+    }
+    .conn-dot { width: 6px; height: 6px; border-radius: 50%; transition: background 0.3s; }
+
+    
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin: 8px 0 20px;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 18px 20px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.25s;
+    }
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, var(--cyan), var(--purple));
+      opacity: 0.6;
+    }
+    .stat-card:hover {
+      border-color: var(--border-hover);
+      box-shadow: var(--glow-c);
+      background: var(--bg-card-hover);
+    }
+
+    .stat-eyebrow {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 8px;
+      letter-spacing: 3px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .stat-num {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 30px;
+      font-weight: 700;
+      line-height: 1;
+      background: linear-gradient(135deg, var(--cyan) 0%, var(--purple) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .stat-desc {
+      font-size: 11px;
+      color: var(--text-sub);
+      margin-top: 6px;
+    }
+
+
+    .progress-wrap {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 18px 22px;
+      margin-bottom: 20px;
+    }
+
+    .progress-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .section-label {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 9px;
+      letter-spacing: 4px;
+      color: var(--text-sub);
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .section-label::after {
+      content: '';
+      display: block;
+      height: 1px;
+      width: 60px;
+      background: linear-gradient(90deg, var(--border), transparent);
+    }
+
+    .progress-pct {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 13px;
+      color: var(--cyan);
+    }
+
+    .progress-track {
+      height: 5px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 100px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 100px;
+      background: linear-gradient(90deg, var(--cyan), var(--purple), var(--pink));
+      transition: width 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+    .progress-fill::after {
+      content: '';
+      position: absolute;
+      right: -2px; top: 0;
+      width: 20px; height: 100%;
+      background: white;
+      opacity: 0.35;
+      filter: blur(4px);
+    }
+
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 18px;
+      align-items: start;
+    }
+
+ 
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 12px;
+    }
+
+
+    .member-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      transition: all 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+    .member-card:hover {
+      border-color: var(--border-hover);
+      background: var(--bg-card-hover);
+      transform: translateY(-2px);
+      box-shadow: var(--glow-c);
+    }
+    .member-card.complete {
+      border-color: rgba(0,255,136,0.2);
+    }
+    .member-card.complete::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, var(--green), transparent);
+    }
+
+    .member-top {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      margin-bottom: 13px;
+    }
+
+    .member-avatar {
+      width: 36px; height: 36px;
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+      /* gradient rotates per card via inline style */
+    }
+
+    .member-meta { flex: 1; min-width: 0; }
+    .member-name {
+      font-weight: 600;
+      font-size: 13px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .member-role {
+      font-size: 10px;
+      color: var(--text-sub);
+      margin-top: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .member-badge {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 8px;
+      letter-spacing: 1.5px;
+      padding: 4px 9px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+    .member-badge.active {
+      background: var(--cyan-dim);
+      border: 1px solid rgba(0,212,255,0.2);
+      color: var(--cyan);
+    }
+    .member-badge.done {
+      background: var(--green-dim);
+      border: 1px solid rgba(0,255,136,0.2);
+      color: var(--green);
+    }
+
+    /* Phase bars */
+    .phase-row { display: flex; gap: 7px; }
+
+    .phase-col { flex: 1; }
+
+    .phase-name {
+      font-size: 8px;
+      color: var(--text-dim);
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+
+    .phase-bar {
+      height: 3px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 100px;
+      overflow: hidden;
+      margin-bottom: 4px;
+    }
+    .phase-fill {
+      height: 100%;
+      border-radius: 100px;
+      transition: width 0.6s ease;
+    }
+    .phase-fill.pending  { width: 0%; }
+    .phase-fill.active   { width: 55%; background: linear-gradient(90deg, var(--cyan), var(--purple)); animation: activePulse 2s ease-in-out infinite; }
+    .phase-fill.complete { width: 100%; background: linear-gradient(90deg, var(--green), #00cc6a); }
+
+    @keyframes activePulse {
+      0%,100% { width: 55%; }
+      50%      { width: 75%; }
+    }
+
+    .phase-tag {
+      font-size: 8px;
+      letter-spacing: 1px;
+    }
+    .phase-tag.pending  { color: var(--text-dim); }
+    .phase-tag.active   { color: var(--cyan); }
+    .phase-tag.complete { color: var(--green); }
+
+    /* ─── ACTIVITY LOG ───────────────────────────────── */
+    .activity-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      height: 620px;
+      position: sticky;
+      top: 20px;
+    }
+
+    .activity-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 12px;
+      flex-shrink: 0;
+    }
+
+    .live-chip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 8px;
+      letter-spacing: 2px;
+      color: var(--green);
+    }
+    .live-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 6px var(--green);
+      animation: dotPulse 1.2s infinite;
+    }
+
+    .activity-feed {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(0,212,255,0.15) transparent;
+    }
+    .activity-feed::-webkit-scrollbar { width: 3px; }
+    .activity-feed::-webkit-scrollbar-track { background: transparent; }
+    .activity-feed::-webkit-scrollbar-thumb { background: rgba(0,212,255,0.15); border-radius: 2px; }
+
+    .log-item {
+      background: rgba(255,255,255,0.018);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 5px;
+      padding: 9px 11px;
+      border-left: 2px solid;
+      animation: logIn 0.3s ease;
+      flex-shrink: 0;
+    }
+    @keyframes logIn {
+      from { opacity: 0; transform: translateX(8px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    .log-item.sent     { border-left-color: var(--cyan); }
+    .log-item.reply    { border-left-color: var(--green); }
+    .log-item.pdf      { border-left-color: var(--purple); }
+    .log-item.error    { border-left-color: var(--red); }
+    .log-item.system   { border-left-color: var(--orange); }
+
+    .log-type {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 7px;
+      letter-spacing: 2px;
+      margin-bottom: 3px;
+    }
+    .log-item.sent   .log-type  { color: var(--cyan); }
+    .log-item.reply  .log-type  { color: var(--green); }
+    .log-item.pdf    .log-type  { color: var(--purple); }
+    .log-item.error  .log-type  { color: var(--red); }
+    .log-item.system .log-type  { color: var(--orange); }
+
+    .log-text  { font-size: 11px; color: var(--text); line-height: 1.4; }
+    .log-time  { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text-dim); margin-top: 3px; }
+
+    /* ─── SHUTDOWN MODAL ─────────────────────────────── */
+    .modal-bg {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    .modal-bg.open { opacity: 1; pointer-events: all; }
+
+    .modal {
+      background: #07071a;
+      border: 1px solid rgba(255,51,102,0.3);
+      border-radius: 12px;
+      padding: 40px 36px;
+      max-width: 380px;
+      width: 90%;
+      text-align: center;
+      transform: scale(0.9);
+      transition: transform 0.3s;
+    }
+    .modal-bg.open .modal { transform: scale(1); }
+
+    .modal-icon { font-size: 32px; margin-bottom: 14px; }
+
+    .modal-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 16px;
+      letter-spacing: 2px;
+      color: var(--red);
+      margin-bottom: 10px;
+    }
+
+    .modal-body {
+      font-size: 12px;
+      color: var(--text-sub);
+      line-height: 1.7;
+      margin-bottom: 28px;
+    }
+
+    .modal-btns { display: flex; gap: 10px; justify-content: center; }
+
+    .modal-cancel {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 9px;
+      letter-spacing: 2px;
+      padding: 11px 22px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      color: var(--text-sub);
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .modal-cancel:hover { background: rgba(255,255,255,0.08); }
+
+    .modal-confirm {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 9px;
+      letter-spacing: 2px;
+      padding: 11px 22px;
+      border: 1px solid rgba(255,51,102,0.4);
+      background: var(--red-dim);
+      color: var(--red);
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .modal-confirm:hover {
+      background: rgba(255,51,102,0.18);
+      box-shadow: var(--glow-r);
+    }
+
+  
+    .empty-team {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 50px 20px;
+      color: var(--text-dim);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 11px;
+      letter-spacing: 3px;
+    }
+
+
+    @media (max-width: 1100px) {
+      .main-grid { grid-template-columns: 1fr; }
+      .activity-panel { height: 400px; position: static; }
+    }
+    @media (max-width: 700px) {
+      .stats-row { grid-template-columns: 1fr 1fr; }
+      .page { padding: 0 14px 40px; }
+    }
+    @media (max-width: 480px) {
+      .header { flex-direction: column; align-items: flex-start; }
+      .header-actions { width: 100%; justify-content: flex-end; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Animated background layers -->
+  <div class="bg-canvas" aria-hidden="true"></div>
+  <div class="scanline"  aria-hidden="true"></div>
+
+  <!-- Shutdown confirmation modal -->
+  <div class="modal-bg" id="shutdownModal" role="dialog" aria-modal="true">
+    <div class="modal">
+      <div class="modal-icon">⚠</div>
+      <div class="modal-title">SHUTDOWN SYSTEM</div>
+      <div class="modal-body">
+        This will terminate the Nexora automation engine,
+        close all active SMTP and IMAP connections, and
+        halt email monitoring. This cannot be undone.
+      </div>
+      <div class="modal-btns">
+        <button class="modal-cancel"  onclick="cancelShutdown()">CANCEL</button>
+        <button class="modal-confirm" onclick="confirmShutdown()">CONFIRM</button>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="page">
+
+  
+    <header class="header">
+      <div class="header-brand">
+        <div class="header-logo">NEXORA PROJECT FLOW AI</div>
+        <div class="header-sub">Intelligent Automation Engine &nbsp;·&nbsp; v2.0</div>
+        <div class="header-rule"></div>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-start"  onclick="startSystem()">▶ START</button>
+        <button class="btn btn-stop"   onclick="stopSystem()">■ STOP</button>
+        <button class="btn btn-close"  onclick="openShutdown()">✕ SHUTDOWN</button>
+      </div>
+    </header>
+
+    <!-- STATUS BAR -->
+    <div class="status-bar">
+      <div class="status-left">
+        <div class="status-pill">
+          <div class="status-dot running" id="statusDot"></div>
+          <span class="status-label">SYSTEM&nbsp;</span>
+          <span class="status-val running" id="statusVal">RUNNING</span>
+        </div>
+        <div class="conn-badge">
+          <div class="conn-dot" id="connDot" style="background:var(--green);box-shadow:0 0 6px var(--green)"></div>
+          <span id="connText">CONNECTED TO BACKEND</span>
+        </div>
+      </div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-dim)" id="clockEl"></div>
+    </div>
+
+    
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-eyebrow">Total Members</div>
+        <div class="stat-num" id="s-total">—</div>
+        <div class="stat-desc">Team size</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-eyebrow">Emails Sent</div>
+        <div class="stat-num" id="s-sent">—</div>
+        <div class="stat-desc">Across all phases</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-eyebrow">Replies Received</div>
+        <div class="stat-num" id="s-replies">—</div>
+        <div class="stat-desc">DONE responses</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-eyebrow">Completed</div>
+        <div class="stat-num" id="s-done">—</div>
+        <div class="stat-desc">All phases finished</div>
+      </div>
+    </div>
+
+ 
+    <div class="progress-wrap">
+      <div class="progress-head">
+        <div class="section-label">Overall Project Progress</div>
+        <div class="progress-pct" id="progressPct">0%</div>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill" style="width:0%"></div>
+      </div>
+    </div>
+
+   
+    <div class="main-grid">
+
+    
+      <div>
+        <div class="section-header">
+          <div class="section-label">Team Members</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-dim)" id="memberCount"></div>
+        </div>
+        <div class="team-grid" id="teamGrid">
+          <div class="empty-team">WAITING FOR BACKEND CONNECTION...</div>
+        </div>
+      </div>
+
+    
+      <div class="activity-panel">
+        <div class="activity-top">
+          <div class="section-label" style="margin-bottom:0">Activity Log</div>
+          <div class="live-chip"><div class="live-dot"></div>LIVE</div>
+        </div>
+        <div class="activity-feed" id="activityFeed">
+         
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+ 
+  <script>
+    const API_BASE = 'http://localhost:5000/api';
+    let lastLogCount = 0;
+    let pollTimer = null;
+
+    /* ─ Avatar gradients ─ */
+    const GRADIENTS = [
+      'linear-gradient(135deg,#00d4ff,#8b5cf6)',
+      'linear-gradient(135deg,#8b5cf6,#f472b6)',
+      'linear-gradient(135deg,#f472b6,#00d4ff)',
+      'linear-gradient(135deg,#00ff88,#00d4ff)',
+      'linear-gradient(135deg,#fb923c,#f472b6)',
+      'linear-gradient(135deg,#00d4ff,#00ff88)',
+      'linear-gradient(135deg,#8b5cf6,#00ff88)',
+      'linear-gradient(135deg,#fb923c,#8b5cf6)',
+      'linear-gradient(135deg,#f472b6,#00ff88)',
+    ];
+
+   
+    function updateClock() {
+      const now = new Date();
+      document.getElementById('clockEl').textContent = now.toLocaleTimeString('en-US', {hour12: false}) + ' LOCAL';
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+
+  
+    function openShutdown() { document.getElementById('shutdownModal').classList.add('open'); }
+    function cancelShutdown() { document.getElementById('shutdownModal').classList.remove('open'); }
+
+    async function confirmShutdown() {
+      addLog('system', 'Shutdown initiated by user', 'SYSTEM');
+      try { await fetch(`${API_BASE}/close`, { method: 'POST' }); } catch (_) {}
+      cancelShutdown();
+      if (pollTimer) clearInterval(pollTimer);
+      setConnectionUI(false);
+      setStatusUI(false);
+      document.getElementById('statusVal').textContent = 'OFFLINE';
+      addLog('system', 'System terminated. Close this tab.', 'SYSTEM');
+    }
+
+ 
+    async function startSystem() {
+      try {
+        await fetch(`${API_BASE}/start`, { method: 'POST' });
+        addLog('system', 'Start command sent to automation engine', 'SYSTEM');
+      } catch (e) {
+        addLog('error', 'Could not reach backend — is it running?', 'ERROR');
+      }
+    }
+
+    async function stopSystem() {
+      try {
+        await fetch(`${API_BASE}/stop`, { method: 'POST' });
+        addLog('system', 'Stop command sent to automation engine', 'SYSTEM');
+      } catch (e) {
+        addLog('error', 'Could not reach backend', 'ERROR');
+      }
+    }
+
+    
+    function setStatusUI(running) {
+      const dot = document.getElementById('statusDot');
+      const val = document.getElementById('statusVal');
+      if (running) {
+        dot.className = 'status-dot running';
+        val.className = 'status-val running';
+        val.textContent = 'RUNNING';
+      } else {
+        dot.className = 'status-dot stopped';
+        val.className = 'status-val stopped';
+        if (val.textContent !== 'OFFLINE') val.textContent = 'STOPPED';
+      }
+    }
+
+    function setConnectionUI(ok) {
+      const dot  = document.getElementById('connDot');
+      const text = document.getElementById('connText');
+      if (ok) {
+        dot.style.background   = 'var(--green)';
+        dot.style.boxShadow    = '0 0 6px var(--green)';
+        text.textContent       = 'CONNECTED TO BACKEND';
+      } else {
+        dot.style.background   = 'var(--red)';
+        dot.style.boxShadow    = '0 0 6px var(--red)';
+        text.textContent       = 'BACKEND OFFLINE';
+      }
+    }
+
+ 
+    function addLog(type, text, label) {
+      const feed = document.getElementById('activityFeed');
+      const now  = new Date().toLocaleTimeString('en-US', { hour12: false });
+
+      const item = document.createElement('div');
+      item.className = `log-item ${type}`;
+      item.innerHTML = `
+        <div class="log-type">${label}</div>
+        <div class="log-text">${text}</div>
+        <div class="log-time">${now}</div>
+      `;
+      feed.prepend(item);
+
+     
+      while (feed.children.length > 60) feed.removeChild(feed.lastChild);
+    }
+
+
+    function getInitials(name) {
+      return (name || '??').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+    }
+
+    function phaseState(memberPhase, phaseIndex, totalPhases) {
+      if (phaseIndex < memberPhase)  return 'complete';
+      if (phaseIndex === memberPhase && memberPhase < totalPhases) return 'active';
+      return 'pending';
+    }
+
+    function phaseLabel(state) {
+      return state === 'complete' ? '✓ DONE'
+           : state === 'active'   ? '● ACTIVE'
+           : '○ PENDING';
+    }
+
+    function buildMemberCard(m, idx) {
+      const { name, role, phase, total_phases } = m;
+      const isComplete = phase >= total_phases;
+      const initials   = getInitials(name);
+      const gradient   = GRADIENTS[idx % GRADIENTS.length];
+
+      let phasesHTML = '';
+      for (let i = 0; i < total_phases; i++) {
+        const state = phaseState(phase, i, total_phases);
+        phasesHTML += `
+          <div class="phase-col">
+            <div class="phase-name">PHASE ${i + 1}</div>
+            <div class="phase-bar"><div class="phase-fill ${state}"></div></div>
+            <div class="phase-tag ${state}">${phaseLabel(state)}</div>
+          </div>`;
+      }
+
+      return `
+        <div class="member-card ${isComplete ? 'complete' : ''}">
+          <div class="member-top">
+            <div class="member-avatar" style="background:${gradient}">${initials}</div>
+            <div class="member-meta">
+              <div class="member-name">${name}</div>
+              <div class="member-role">${role || 'Team Member'}</div>
+            </div>
+            <div class="member-badge ${isComplete ? 'done' : 'active'}">
+              ${isComplete ? 'COMPLETE' : 'P' + (phase + 1)}
+            </div>
+          </div>
+          <div class="phase-row">${phasesHTML}</div>
+        </div>`;
+    }
+
+
+    function renderStatus(data) {
+      const team        = data.team || [];
+      const totalPhases = data.total_phases || 2;
+      const running     = data.running || false;
+
+      setStatusUI(running);
+      setConnectionUI(true);
+
+    
+      let sentCount    = 0;
+      let repliesCount = 0;
+      let doneCount    = 0;
+
+      team.forEach(m => {
+        sentCount    += Math.min(m.phase, totalPhases);
+        repliesCount += (m.phase > 0 ? m.phase : 0);
+        if (m.phase >= totalPhases) doneCount++;
+      });
+
+      document.getElementById('s-total').textContent   = team.length || '—';
+      document.getElementById('s-sent').textContent    = sentCount   || '—';
+      document.getElementById('s-replies').textContent = repliesCount || '—';
+      document.getElementById('s-done').textContent    = doneCount   || '—';
+      document.getElementById('memberCount').textContent = `${team.length} MEMBERS`;
+
+   
+      const total = team.length * totalPhases;
+      const done  = team.reduce((s, m) => s + Math.min(m.phase, totalPhases), 0);
+      const pct   = total > 0 ? Math.round((done / total) * 100) : 0;
+      document.getElementById('progressFill').style.width = pct + '%';
+      document.getElementById('progressPct').textContent  = pct + '%';
+
+   
+      const grid = document.getElementById('teamGrid');
+      if (team.length === 0) {
+        grid.innerHTML = '<div class="empty-team">NO TEAM DATA RECEIVED YET</div>';
+      } else {
+        grid.innerHTML = team.map((m, i) => buildMemberCard(m, i)).join('');
+      }
+
+     
+      const logs    = data.activity_log || [];
+      const newLogs = logs.slice(lastLogCount);
+      newLogs.forEach(log => addLog(log.type, log.text, log.label));
+      lastLogCount = logs.length;
+    }
+
+
+    async function poll() {
+      try {
+        const res  = await fetch(`${API_BASE}/status`, { signal: AbortSignal.timeout(4000) });
+        const data = await res.json();
+        renderStatus(data);
+      } catch (err) {
+        setConnectionUI(false);
+      }
+    }
+
+   
+    addLog('system', 'Nexora UI initialized — connecting to backend...', 'SYSTEM');
+    poll();
+    pollTimer = setInterval(poll, 3000);
+  </script>
+</body>
+</html>

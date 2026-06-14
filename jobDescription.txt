@@ -1,0 +1,63 @@
+1.
+Name. Ethan Brooks
+Job Title. Project Manager
+Job Description 1. <h1>Primary Assignment</h1><p>Perform the primary responsibilities associated with the role and complete all required inspections and coordination activities</p><h2>Objective</h2><p>Complete the assigned work according to project requirements</p>
+Job Description 2. <h1>Secondary Assignment</h1><p>After completing Job Description 1, begin the follow-up responsibilities, verification activities, and remaining coordination tasks for the role</p><h2>Objective</h2><p>Finalize pending work and prepare the area for successful completion</p>
+Site. Site Office
+Documents. Daily_Project_Status.xlsx, Client_Meeting_Minutes.docx, Master_Schedule.pdf
+2.
+Name. Ayesha Malik
+Job Title. Civil Engineer
+Job Description 1. <h1>Primary Assignment</h1><p>Perform the primary responsibilities associated with the role and complete all required inspections and coordination activities</p><h2>Objective</h2><p>Complete the assigned work according to project requirements</p>
+Job Description 2. <h1>Secondary Assignment</h1><p>After completing Job Description 1, begin the follow-up responsibilities, verification activities, and remaining coordination tasks for the role</p><h2>Objective</h2><p>Finalize pending work and prepare the area for successful completion</p>
+Site. Main Building
+Documents. None Assigned
+3.
+Name. Hamza Khan
+Job Title. Electrical Engineer
+Job Description 1. <h1>Primary Assignment</h1><p>Perform the primary responsibilities associated with the role and complete all required inspections and coordination activities</p><h2>Objective</h2><p>Complete the assigned work according to project requirements</p>
+Job Description 2. <h1>Secondary Assignment</h1><p>After completing Job Description 1, begin the follow-up responsibilities, verification activities, and remaining coordination tasks for the role</p><h2>Objective</h2><p>Finalize pending work and prepare the area for successful completion</p>
+Site. Electrical Room
+Documents. Electrical_Load_Report.xlsx, Panel_Test_Report.pdf, Commissioning_Checklist.docx
+4.
+Name. Usman Tariq
+Job Title. Architect
+Job Description 1. <h1>Primary Assignment</h1><p>Perform the primary responsibilities associated with the role and complete all required inspections and coordination activities</p><h2>Objective</h2><p>Complete the assigned work according to project requirements</p>
+Job Description 2. <h1>Secondary Assignment</h1><p>After completing Job Description 1, begin the follow-up responsibilities, verification activities, and remaining coordination tasks for the role</p><h2>Objective</h2><p>Finalize pending work and prepare the area for successful completion</p>
+Site. Design Office
+Documents. None Assigned
+5.
+Name. Sarah Ahmed
+Job Title. Mechanical Engineer
+Job Description 1. <h1>Primary Assignment</h1><p>Perform the primary responsibilities associated with the role and complete all required inspections and coordination activities</p><h2>Objective</h2><p>Complete the assigned work according to project requirements</p>
+Job Description 2. <h1>Secondary Assignment</h1><p>After completing Job Description 1, begin the follow-up responsibilities, verification activities, and remaining coordination tasks for the role</p><h2>Objective</h2><p>Finalize pending work and prepare the area for successful completion</p>
+Site. Mechanical Plant
+Documents. None Assigned
+6.
+Name. Bilal Raza
+Job Title. Plumbing Supervisor
+Job Description 1. <h1>Primary Assignment</h1><p>Perform the primary responsibilities associated with the role and complete all required inspections and coordination activities</p><h2>Objective</h2><p>Complete the assigned work according to project requirements</p>
+Job Description 2. <h1>Secondary Assignment</h1><p>After completing Job Description 1, begin the follow-up responsibilities, verification activities, and remaining coordination tasks for the role</p><h2>Objective</h2><p>Finalize pending work and prepare the area for successful completion</p>
+Site. Utility Area
+Documents. None Assigned
+7.
+Name. Mariam Siddiqui
+Job Title. Interior Designer
+Job Description 1. <h1>Primary Assignment</h1><p>Perform the primary responsibilities associated with the role and complete all required inspections and coordination activities</p><h2>Objective</h2><p>Complete the assigned work according to project requirements</p>
+Job Description 2. <h1>Secondary Assignment</h1><p>After completing Job Description 1, begin the follow-up responsibilities, verification activities, and remaining coordination tasks for the role</p><h2>Objective</h2><p>Finalize pending work and prepare the area for successful completion</p>
+Site. Showroom
+Documents. Interior_Finish_Schedule.xlsx, Furniture_Catalog.pdf, Design_Revision.docx
+8.
+Name. Noah Wilson
+Job Title. IT & Network Lead
+Job Description 1. <h1>Primary Assignment</h1><p>Perform the primary responsibilities associated with the role and complete all required inspections and coordination activities</p><h2>Objective</h2><p>Complete the assigned work according to project requirements</p>
+Job Description 2. <h1>Secondary Assignment</h1><p>After completing Job Description 1, begin the follow-up responsibilities, verification activities, and remaining coordination tasks for the role</p><h2>Objective</h2><p>Finalize pending work and prepare the area for successful completion</p>
+Site. Server Room
+Documents. None Assigned
+9.
+Name. Zain Ali
+Job Title. Operations Coordinator
+Job Description 1. <h1>Primary Assignment</h1><p>Perform the primary responsibilities associated with the role and complete all required inspections and coordination activities</p><h2>Objective</h2><p>Complete the assigned work according to project requirements</p>
+Job Description 2. <h1>Secondary Assignment</h1><p>After completing Job Description 1, begin the follow-up responsibilities, verification activities, and remaining coordination tasks for the role</p><h2>Objective</h2><p>Finalize pending work and prepare the area for successful completion</p>
+Site. Site Office
+Documents. None Assigned
